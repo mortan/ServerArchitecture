@@ -46,14 +46,15 @@ namespace Server
             }
             catch (Exception ex)
             {
+                bool notify = true;
                 if (ex is SocketExtensions.RemoteHostDisconnectException)
                 {
                     log.Debug("Client closed the connection to the server!");
                 }
-                else if (ex is ObjectDisposedException ||
-                         (ex is SocketException && ((SocketException) ex).SocketErrorCode == SocketError.Interrupted))
+                else if (socket.IsServerCloseException(ex))
                 {
                     log.Debug("Client connection was closed from our side");
+                    notify = false;
                 }
                 else
                 {
@@ -62,7 +63,10 @@ namespace Server
 
                 socket.SafeClose();
 
-                OnClientDisconnect();
+                if (notify)
+                {
+                    OnClientDisconnect();
+                }
             }
         }
 

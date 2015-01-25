@@ -9,8 +9,8 @@ namespace Server
     public class ClientListener
     {
         private static readonly ILog log = LogManager.GetLogger(typeof (ClientListener));
-        private readonly int listenPort;
         private Socket serverSocket;
+        private int listenPort;
 
         public ClientListener(int port)
         {
@@ -45,7 +45,7 @@ namespace Server
             {
                 if (serverSocket.IsServerCloseException(ex))
                 {
-                    log.Info("Socket has been closed");
+                    log.Debug("Accept socket has been closed from our side");
                 }
                 else
                 {
