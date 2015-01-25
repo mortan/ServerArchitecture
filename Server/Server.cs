@@ -31,18 +31,19 @@ namespace Server
                 while (true)
                 {
                     Console.ReadKey();
+
+                    if (clientConnections.Count <= 0)
+                    {
+                        Console.Out.WriteLine("No clients connected!");
+                        continue;
+                    }
+
+                    var client = clientConnections[0];
                     lock (clientConnections)
                     {
-                        if (clientConnections.Count <= 0)
-                        {
-                            Console.Out.WriteLine("No clients connected!");
-                            continue;
-                        }
-
-                        var client = clientConnections[0];
-                        client.Stop();
                         clientConnections.Remove(client);
                     }
+                    client.Stop();
                 }
             }
         }
